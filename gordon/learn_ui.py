@@ -13,14 +13,15 @@ class LearnUI(Gtk.Box):
 		self.set_kr(word.korean)
 		self.set_en(word.english)
 		self.set_defn(word.definition)
-		self.word = word
+
+	def reshuffle(self):
+		self.__shuff = random.sample(self.words, len(self.words))
 
 	def new_word(self):
-		while True:
-			word = random.choice(self.words)
-			if self.word != word:
-				break
-		self.update_word(word)
+		if not self.__shuff:
+			self.reshuffle()
+
+		self.update_word(self.__shuff.pop())
 
 	def kb_space(self):
 		self.new_word()
@@ -30,7 +31,7 @@ class LearnUI(Gtk.Box):
 				orientation = Gtk.Orientation.VERTICAL,
 				spacing = 6)
 		self.words = words
-		self.word = None
+		self.reshuffle()
 
 		self.kr = Gtk.Label()
 		self.pack_start(self.kr, True, True, 0)
