@@ -18,6 +18,12 @@ class MainWin(Gtk.Window):
 		w = self.stack.get_visible_child()
 		w.kb_space()
 
+	def kb_alt_1(self, *_):
+		self.stack.set_visible_child_name('learn')
+
+	def kb_alt_2(self, *_):
+		self.stack.set_visible_child_name('test')
+
 	def __init__(self, nouns):
 		Gtk.Window.__init__(self)
 		self.in_main = False
@@ -38,28 +44,29 @@ class MainWin(Gtk.Window):
 				Gdk.ModifierType.CONTROL_MASK,
 				0,
 				self.destroy)
-		self.add_accel_group(accel)
-
-		accel = Gtk.AccelGroup()
 		accel.connect(Gdk.keyval_from_name('W'),
 				Gdk.ModifierType.CONTROL_MASK,
 				0,
 				self.destroy)
-		self.add_accel_group(accel)
-
-		accel = Gtk.AccelGroup()
 		accel.connect(Gdk.keyval_from_name('Escape'),
 				0,
 				0,
 				self.destroy)
-		self.add_accel_group(accel)
-
-		accel = Gtk.AccelGroup()
 		accel.connect(Gdk.keyval_from_name('space'),
 				0,
 				0,
 				self.kb_space)
+		accel.connect(Gdk.keyval_from_name('1'),
+				Gdk.ModifierType.MOD1_MASK,
+				0,
+				self.kb_alt_1)
+		accel.connect(Gdk.keyval_from_name('2'),
+				Gdk.ModifierType.MOD1_MASK,
+				0,
+				self.kb_alt_2)
 		self.add_accel_group(accel)
+
+		self.set_mnemonic_modifier(0)
 
 		self.stack = Gtk.Stack()
 		self.stack.set_transition_type(\
@@ -71,7 +78,7 @@ class MainWin(Gtk.Window):
 		self.stack.child_set_property(c, 'icon-name',
 					'accessories-dictionary-symbolic')
 
-		c = LearnUI(nouns)
+		c = TestUI(nouns)
 		self.stack.add_titled(c, 'test', 'Test')
 		self.stack.child_set_property(c, 'icon-name',
 				'application-certificate-symbolic')
