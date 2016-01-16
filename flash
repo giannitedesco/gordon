@@ -1,0 +1,116 @@
+#!/usr/bin/env python
+
+from gordon import *
+from gi.repository import Gtk, Gdk
+import random
+
+class LearnWin(Gtk.Box):
+	def set_kr(self, s):
+		self.kr.set_markup('<span size="50000"><b>%s</b></span>'%s)
+	def set_en(self, s):
+		self.en.set_markup('<span size="30000"><b>%s</b></span>'%s)
+	
+	def update_word(self, word):
+		self.set_kr(word.korean)
+		self.set_en(word.english)
+		self.word = word
+
+	def new_word(self):
+		while True:
+			word = random.choice(self.words)
+			if self.word != word:
+				break
+		self.update_word(word)
+
+	def kb_space(self):
+		self.new_word()
+
+	def __init__(self, words):
+		super(LearnWin, self).__init__(\
+				orientation = Gtk.Orientation.VERTICAL,
+				spacing = 6)
+		self.words = words
+		self.word = None
+
+		self.kr = Gtk.Label()
+		self.pack_start(self.kr, True, True, 0)
+
+		self.en = Gtk.Label()
+		self.pack_start(self.en, True, True, 0)
+
+		self.new_word()
+
+class MainWin(Gtk.Window):
+	def destroy(self, *_):
+		Gtk.Window.destroy(self)
+		if self.in_main:
+			Gtk.main_quit()
+			self.in_main = False
+
+	def main(self):
+		self.in_main = True
+		Gtk.main()
+
+	def kb_space(self, *_):
+		w = self.stack.get_visible_child()
+		w.kb_space()
+
+	def __init__(self, nouns):
+		Gtk.Window.__init__(self)
+		self.in_main = False
+		self.connect('destroy', self.destroy)
+		self.set_default_size(320, 280)
+		self.set_title('Korean flashcards')
+
+		vb = Gtk.Box(orientation = Gtk.Orientation.VERTICAL,
+				spacing = 6)
+		self.add(vb)
+
+		accel = Gtk.AccelGroup()
+		accel.connect(Gdk.keyval_from_name('Q'),
+				Gdk.ModifierType.CONTROL_MASK,
+				0,
+				self.destroy)
+		self.add_accel_group(accel)
+
+		accel = Gtk.AccelGroup()
+		accel.connect(Gdk.keyval_from_name('W'),
+				Gdk.ModifierType.CONTROL_MASK,
+				0,
+				self.destroy)
+		self.add_accel_group(accel)
+
+		accel = Gtk.AccelGroup()
+		accel.connect(Gdk.keyval_from_name('Escape'),
+				0,
+				0,
+				self.destroy)
+		self.add_accel_group(accel)
+
+		accel = Gtk.AccelGroup()
+		accel.connect(Gdk.keyval_from_name('space'),
+				0,
+				0,
+				self.kb_space)
+		self.add_accel_group(accel)
+
+		self.stack = Gtk.Stack()
+		self.stack.set_transition_type(\
+				Gtk.StackTransitionType.SLIDE_LEFT_RIGHT)
+		self.stack.set_transition_duration(1000)
+
+		self.stack.add_titled(LearnWin(nouns), 'learn', 'Learn')
+		self.stack.add_titled(LearnWin(nouns), 'test', 'Test')
+
+		stack_switcher = Gtk.StackSwitcher()
+		stack_switcher.set_stack(self.stack)
+
+		vb.pack_start(stack_switcher, False, False, 0)
+		vb.pack_start(self.stack, True, True, 0)
+
+		self.show_all()
+
+if __name__ == '__main__':
+	words = load_from_csv('data/nouns.csv')
+	x = MainWin(words)
+	x.main()
