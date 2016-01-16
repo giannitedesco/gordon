@@ -2,49 +2,6 @@
 
 from gordon import *
 from gi.repository import Gtk, Gdk
-import random
-
-class LearnWin(Gtk.Box):
-	def set_kr(self, s):
-		self.kr.set_markup('<span size="50000"><b>%s</b></span>'%s)
-	def set_en(self, s):
-		self.en.set_markup('<span size="30000"><b>%s</b></span>'%s)
-	def set_defn(self, s):
-		self.defn.set_markup('<span size="20000"><b>%s</b></span>'%s)
-	
-	def update_word(self, word):
-		self.set_kr(word.korean)
-		self.set_en(word.english)
-		self.set_defn(word.definition)
-		self.word = word
-
-	def new_word(self):
-		while True:
-			word = random.choice(self.words)
-			if self.word != word:
-				break
-		self.update_word(word)
-
-	def kb_space(self):
-		self.new_word()
-
-	def __init__(self, words):
-		super(LearnWin, self).__init__(\
-				orientation = Gtk.Orientation.VERTICAL,
-				spacing = 6)
-		self.words = words
-		self.word = None
-
-		self.kr = Gtk.Label()
-		self.pack_start(self.kr, True, True, 0)
-
-		self.en = Gtk.Label()
-		self.pack_start(self.en, True, True, 0)
-
-		self.defn = Gtk.Label()
-		self.pack_start(self.defn, True, True, 0)
-
-		self.new_word()
 
 class MainWin(Gtk.Window):
 	def destroy(self, *_):
@@ -66,7 +23,11 @@ class MainWin(Gtk.Window):
 		self.in_main = False
 		self.connect('destroy', self.destroy)
 		self.set_default_size(320, 280)
-		self.set_title('Korean flashcards')
+
+		hb = Gtk.HeaderBar()
+		hb.set_show_close_button(True)
+		hb.props.title = 'Korean vocabulary'
+		self.set_titlebar(hb)
 
 		vb = Gtk.Box(orientation = Gtk.Orientation.VERTICAL,
 				spacing = 6)
@@ -103,15 +64,22 @@ class MainWin(Gtk.Window):
 		self.stack = Gtk.Stack()
 		self.stack.set_transition_type(\
 				Gtk.StackTransitionType.SLIDE_LEFT_RIGHT)
-		self.stack.set_transition_duration(1000)
+		self.stack.set_transition_duration(500)
 
-		self.stack.add_titled(LearnWin(nouns), 'learn', 'Learn')
-		self.stack.add_titled(LearnWin(nouns), 'test', 'Test')
+		c = LearnUI(nouns)
+		self.stack.add_titled(c, 'learn', 'Learn')
+		self.stack.child_set_property(c, 'icon-name',
+					'accessories-dictionary-symbolic')
+
+		c = LearnUI(nouns)
+		self.stack.add_titled(c, 'test', 'Test')
+		self.stack.child_set_property(c, 'icon-name',
+				'application-certificate-symbolic')
 
 		stack_switcher = Gtk.StackSwitcher()
 		stack_switcher.set_stack(self.stack)
 
-		vb.pack_start(stack_switcher, False, False, 0)
+		hb.pack_end(stack_switcher)
 		vb.pack_start(self.stack, True, True, 0)
 
 		self.show_all()
