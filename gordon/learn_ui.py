@@ -3,7 +3,9 @@ import random
 
 class LearnUI(Gtk.Box):
 	def set_kr(self, s):
-		self.kr.set_markup('<span size="50000"><b>%s</b></span>'%s)
+		self.kr.set_markup('<span size="50000">'
+'<b><a href="http://en.wiktionary.org/wiki/%s">%s</a></b>'
+'</span>'%(s, s))
 	def set_en(self, s):
 		self.en.set_markup('<span size="30000"><b>%s</b></span>'%s)
 	def set_defn(self, s):
@@ -37,10 +39,12 @@ class LearnUI(Gtk.Box):
 		self.reshuffle()
 
 		self.kr = Gtk.Label()
+		#self.kr.props.selectable = True
 		self.pack_start(self.kr, True, True, 0)
 
 		self.en = Gtk.Label()
 		self.pack_start(self.en, True, True, 0)
+		self.en.grab_focus()
 
 		self.defn = Gtk.Label()
 		self.pack_start(self.defn, True, True, 0)
