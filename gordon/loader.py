@@ -1,9 +1,12 @@
 from noun import Noun
-import csv
+from verb import Verb
 
 def load_from_csv(fn):
 	out = []
-	gd = {'Noun': Noun}
+	gd = {
+		'Noun': Noun,
+		'Verb': Verb,
+	}
 	ld = {}
 	with open(fn, 'rb') as f:
 		line_num = 1

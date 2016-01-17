@@ -1,7 +1,7 @@
-from immutable import ImmutableObject
+from word import Word
 from operator import itemgetter
 
-class Noun(ImmutableObject):
+class Noun(Word):
 	_fields = ('ko', 'en', 'defn')
 	ko = property(itemgetter(0))
 	en = property(itemgetter(1))
