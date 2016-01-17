@@ -14,7 +14,7 @@ both the Korean and English meanings, with an optional helpful description.
 
 Press the space-bar to progress.
 
-## Learning Mode (press Alt-2)
+## Testing Mode (press Alt-2)
 ![Testing Mode](http://www.scaramanga.co.uk/gordon/test-kr.png)
 
 In testing mode, it displays a word in English and requires you to correctly
