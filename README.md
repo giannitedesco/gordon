@@ -4,7 +4,12 @@ Copyright (c) 2016 Gianni Tedesco (gianni at scaramanga dot co dot uk)
 
 This software is released under the GNU GPL version 3 (see: COPYING)
 
+In learning-mode, it cycles through all the words in a random order showing
+both the Korean and English meanings, with an optional helpful description.
 ![Learning Mode](http://www.scaramanga.co.uk/gordon/learn-kr.png)
+
+In testing mode, it displays a word in English and requires you to correctly
+identify the word in Korean before showing the next word.
 ![Testing Mode](http://www.scaramanga.co.uk/gordon/test-kr.png)
 
 
