@@ -16,7 +16,6 @@ class TestUI(Gtk.Box):
 			pass
 
 	def get_answers(self, word):
-		a = set()
 		if isinstance(word, Verb):
 			srch = self.kr_v
 		elif isinstance(word, Noun):
@@ -24,13 +23,16 @@ class TestUI(Gtk.Box):
 		else:
 			srch = self.kr_words
 
+		a = set()
 		while(len(a) != 3):
 			a.update(random.sample(srch, 3 - len(a)))
-			if word in a:
-				a.remove(word)
-				continue
+			if word.ko in a:
+				a.remove(word.ko)
+			print a
+		print set(a | set({word.ko}))
+		print
 
-		assert len(set(a | set({word}))) == 4
+		assert len(set(a | set({word.ko}))) == 4
 		a = [(word.ko, True)] + [(x, False) for x in list(a)]
 		random.shuffle(a)
 		return a
