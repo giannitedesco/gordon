@@ -13,8 +13,8 @@ class TestUI(Gtk.Box):
 			pass
 
 	def update_word(self, word):
-		self.set_q(word.english)
-		a = [(word.korean, True)] + \
+		self.set_q(word.en)
+		a = [(word.ko, True)] + \
 			[(x, False) for x in random.sample(self.kr_words, 3)]
 		random.shuffle(a)
 		for i, (a, is_correct) in enumerate(a):
@@ -40,8 +40,8 @@ class TestUI(Gtk.Box):
 				orientation = Gtk.Orientation.VERTICAL,
 				spacing = 6)
 
-		self.kr_words = [x.korean for x in words]
-		self.en_words = [x.english for x in words]
+		self.kr_words = [x.ko for x in words]
+		self.en_words = [x.en for x in words]
 		self.words = words
 		self.reshuffle()
 

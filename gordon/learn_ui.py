@@ -10,9 +10,12 @@ class LearnUI(Gtk.Box):
 		self.defn.set_markup('<span size="20000"><b>%s</b></span>'%s)
 	
 	def update_word(self, word):
-		self.set_kr(word.korean)
-		self.set_en(word.english)
-		self.set_defn(word.definition)
+		self.set_kr(word.ko)
+		self.set_en(word.en)
+		if word.defn is not None:
+			self.set_defn(word.defn)
+		else:
+			self.set_defn('')
 
 	def reshuffle(self):
 		self.__shuff = random.sample(self.words, len(self.words))

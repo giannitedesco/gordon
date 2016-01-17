@@ -1,14 +1,17 @@
-from word import Word
+from noun import Noun
 import csv
 
 def load_from_csv(fn):
 	out = []
+	gd = {'Noun': Noun}
+	ld = {}
 	with open(fn, 'rb') as f:
-		r = csv.reader(f)
-		for row in r:
+		line_num = 1
+		for l in iter(f.readline, ''):
 			try:
-				out.append(Word(*row))
-			except TypeError:
-				print 'Error on %s:%d'%(fn, r.line_num)
-				continue
+				x = eval(l.rstrip('\r\n'), ld, gd)
+			except Exception as e:
+				print '%s:%d: %s'%(fn, line_num, e.message)
+			out.append(x)
+			line_num += 1
 	return out

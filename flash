@@ -24,7 +24,7 @@ class MainWin(Gtk.Window):
 	def kb_alt_2(self, *_):
 		self.stack.set_visible_child_name('test')
 
-	def __init__(self, nouns):
+	def __init__(self, words):
 		Gtk.Window.__init__(self)
 		self.in_main = False
 		self.connect('destroy', self.destroy)
@@ -73,12 +73,12 @@ class MainWin(Gtk.Window):
 				Gtk.StackTransitionType.SLIDE_LEFT_RIGHT)
 		self.stack.set_transition_duration(500)
 
-		c = LearnUI(nouns)
+		c = LearnUI(words)
 		self.stack.add_titled(c, 'learn', 'Learn')
 		self.stack.child_set_property(c, 'icon-name',
 					'accessories-dictionary-symbolic')
 
-		c = TestUI(nouns)
+		c = TestUI(words)
 		self.stack.add_titled(c, 'test', 'Test')
 		self.stack.child_set_property(c, 'icon-name',
 				'application-certificate-symbolic')
@@ -92,6 +92,6 @@ class MainWin(Gtk.Window):
 		self.show_all()
 
 if __name__ == '__main__':
-	words = load_from_csv('data/nouns.csv')
+	words = load_from_csv('data/words')
 	x = MainWin(words)
 	x.main()
