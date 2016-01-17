@@ -28,9 +28,6 @@ class TestUI(Gtk.Box):
 			a.update(random.sample(srch, 3 - len(a)))
 			if word.ko in a:
 				a.remove(word.ko)
-			print a
-		print set(a | set({word.ko}))
-		print
 
 		assert len(set(a | set({word.ko}))) == 4
 		a = [(word.ko, True)] + [(x, False) for x in list(a)]
