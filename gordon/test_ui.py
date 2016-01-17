@@ -1,6 +1,9 @@
 from gi.repository import Gtk
 import random
 
+from verb import Verb
+from noun import Noun
+
 class TestUI(Gtk.Box):
 	def set_q(self, s):
 		self.q.set_markup('<span size="50000"><b>%s</b></span>'%s)
@@ -12,11 +15,30 @@ class TestUI(Gtk.Box):
 			# TODO: something
 			pass
 
+	def get_answers(self, word):
+		a = set()
+		if isinstance(word, Verb):
+			srch = self.kr_v
+		elif isinstance(word, Noun):
+			srch = self.kr_n
+		else:
+			srch = self.kr_words
+
+		while(len(a) != 3):
+			a.update(random.sample(srch, 3 - len(a)))
+			if word in a:
+				a.remove(word)
+				continue
+
+		assert len(set(a | set({word}))) == 4
+		a = [(word.ko, True)] + [(x, False) for x in list(a)]
+		random.shuffle(a)
+		return a
+
 	def update_word(self, word):
 		self.set_q(word.en)
-		a = [(word.ko, True)] + \
-			[(x, False) for x in random.sample(self.kr_words, 3)]
-		random.shuffle(a)
+		a = self.get_answers(word)
+
 		for i, (a, is_correct) in enumerate(a):
 			self.b[i].get_child().set_markup_with_mnemonic(\
 				'<span size="30000"><b>_%d. %s</b></span>'%\
@@ -42,6 +64,10 @@ class TestUI(Gtk.Box):
 
 		self.kr_words = [x.ko for x in words]
 		self.en_words = [x.en for x in words]
+		self.kr_v = [x.ko for x in words \
+				if isinstance(x, Verb)]
+		self.kr_n = [x.ko for x in words \
+				if isinstance(x, Noun)]
 		self.words = words
 		self.reshuffle()
 
