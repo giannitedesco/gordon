@@ -16,12 +16,7 @@ class TestUI(Gtk.Box):
 			pass
 
 	def get_answers(self, word):
-		if isinstance(word, Verb):
-			srch = self.kr_v
-		elif isinstance(word, Noun):
-			srch = self.kr_n
-		else:
-			srch = self.kr_words
+		srch = self.kr_w[word.__class__]
 
 		a = set()
 		while(len(a) != 3):
@@ -63,10 +58,12 @@ class TestUI(Gtk.Box):
 
 		self.kr_words = [x.ko for x in words]
 		self.en_words = [x.en for x in words]
-		self.kr_v = [x.ko for x in words \
-				if isinstance(x, Verb)]
-		self.kr_n = [x.ko for x in words \
-				if isinstance(x, Noun)]
+		self.kr_w = dict()
+		for x in words:
+			try:
+				self.kr_w[x.__class__].append(x.ko)
+			except KeyError:
+				self.kr_w[x.__class__] = [x.ko]
 		self.words = words
 		self.reshuffle()
 

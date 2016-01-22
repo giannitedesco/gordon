@@ -1,11 +1,13 @@
 from noun import Noun
 from verb import Verb
+from word import Word
 
 def load_from_csv(fn):
 	out = []
 	gd = {
 		'Noun': Noun,
 		'Verb': Verb,
+		'Word': Word,
 	}
 	ld = {}
 	with open(fn, 'rb') as f:
